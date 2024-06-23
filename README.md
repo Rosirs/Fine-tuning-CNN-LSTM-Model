@@ -9,4 +9,4 @@
 - final.ipynb shows the preprocessed dataset and fine-tuned model, using the model for price volatility prediction (classification task)
 - cnn_lstm_gold_price.ipynb shows the original model (with minor modifications) for the price prediction task, and model 3 with a dropout layer added
 
-  Click 'Run All' to easily run the code.
+Click 'Run All' to easily run the code.

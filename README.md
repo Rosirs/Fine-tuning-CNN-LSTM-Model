@@ -1,12 +1,35 @@
-# Fine-tuning-CNN-LSTM-Model for Gold Price Fluctuation Prediction
-- dataset in the data directory
-- draw_cm.py is used to draw confusion matrix
-- In the cnn_lstm_gold_price.ipynb, I removed models other than CNN-LSTM and added dropout layer when type==3
-- In the final.ipynb, I modified the data type, modified the time series to binary data format (0 or 1) and modified the model compilation to binary, adding the dropout layer
+以下是该模型每一层的参数设置表格：
 
-# How to run
-  All jupyter notebooks can be run, please make sure the environment is installed correctly
-- final.ipynb shows the preprocessed dataset and fine-tuned model, using the model for price volatility prediction (classification task)
-- cnn_lstm_gold_price.ipynb shows the original model (with minor modifications) for the price prediction task, and model 3 with a dropout layer added
+| 层名称       | 参数                     | 设置                                                                 |
+|--------------|--------------------------|----------------------------------------------------------------------|
+| LSTM层       | 输入维度                 | `input_size`（输入特征的维度）                                       |
+|              | 隐藏层维度               | `hidden_size`（LSTM隐藏层的维度）                                    |
+|              | 层数                     | `num_layers`（LSTM的层数）                                           |
+|              | 方向数                   | `num_directions`（单向LSTM，值为1）                                  |
+|              | 批量大小                 | `batch_size`（每次训练或推理时输入的样本数量）                       |
+| 注意力机制   | 线性层输入维度           | `hidden_size`（LSTM隐藏层的维度）                                    |
+|              | 线性层输出维度           | `hidden_size`（与输入维度相同，用于计算注意力分数）                   |
+|              | 激活函数                 | `tanh`（用于计算注意力分数）                                         |
+|              | 权重计算                 | `softmax`（在时间步维度上计算注意力权重）                            |
+| 全连接层     | 输入维度                 | `hidden_size`（注意力机制生成的上下文向量的维度）                    |
+|              | 输出维度                 | `output_size`（模型输出的维度，即预测结果的大小）                     |
 
-Click 'Run All' to easily run the code.
+### 表格说明
+
+1. **LSTM层**：
+   - 输入维度由模型的 `input_size` 参数决定，表示每个时间步输入向量的大小。
+   - 隐藏层维度由 `hidden_size` 参数决定，表示LSTM内部状态的复杂度。
+   - 层数由 `num_layers` 参数决定，表示堆叠的LSTM层的数量。
+   - 方向数为1，表示这是一个单向LSTM。
+   - 批量大小由 `batch_size` 参数决定，表示每次训练或推理时输入的样本数量。
+
+2. **注意力机制**：
+   - 线性层的输入和输出维度均为 `hidden_size`，用于对LSTM输出进行变换，计算注意力分数。
+   - 使用 `tanh` 激活函数对注意力分数进行非线性变换。
+   - 使用 `softmax` 函数在时间步维度上计算注意力权重，使得权重之和为1。
+
+3. **全连接层**：
+   - 输入维度为 `hidden_size`，与注意力机制生成的上下文向量的维度相同。
+   - 输出维度为 `output_size`，表示模型最终的预测结果的大小。
+
+通过以上参数设置，该模型能够有效地处理序列数据，并在序列预测任务中取得较好的性能。
